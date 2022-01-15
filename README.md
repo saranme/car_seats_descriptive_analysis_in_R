@@ -1,2 +1,2 @@
-# car_seats_descriptive_analysis_in_R
-Descriptive analysis in R of stores that sell car seats
+# Analysis in R of stores that sell car seats.
+Analysis focused on the study of price, sales and customer profile.
