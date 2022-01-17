@@ -33,7 +33,7 @@ str(df)
 lapply(df,function(x) { length(which(is.na(x)))})
 ```
 
-Las variables no tienen valores nulos.
+Variables do not have null values.
 ```{r}
 # Select just numerical features
 nums <- unlist(lapply(df, is.numeric))
@@ -55,11 +55,11 @@ for (var in names(df[, cat])) {
   print(round(prop.table(table(df[,c(var)])),2))
 }
 ```
-Hay el doble más de tiendas con asientos de coches en el estante medio que tiendas con asientos de coches en el estante malo o bueno.
+There are twice as many stores with car seats on the middle shelf as stores with car seats on the bad or good shelf.
 
-El 30% de las tiendas están en zona rural.
+30% of the stores are in rural areas.
 
-El 36% de las tiendas no están en US.
+36% of stores are not in the US.
 
 ```{r}
 # New variable with ages by interval
@@ -73,33 +73,33 @@ df$Sales_cat <- cut(df$Sales, breaks = c(0,5.39,7.49,9.32,16.27), labels = c("ba
 df$diff_price <- abs(df$Price - df$CompPrice)
 ```
 
-# Análisis de la variable precio
-### ¿A mayor precio mayor precio de la competencia?
+# Analysis of the price variable
+### The higher the price, the higher the price of the competition?
 ```{r}
 plot(x = df$Price, y = df$CompPrice, main="Price VS CompPrice", xlab="Price",ylab="Competence Price", col = alpha("black", 0.5), pch = 19)
 ```
 
-Hay una clara correlación entre el precio de la tienda y el de su competencia.
+There is a clear correlation between the price of the store and that of its competition.
 
-### La distribución del precio del asiento del coche según las ventas en las tiendas sean altas, medias o bajas.
+### The distribution of the price of the car seat according to the sales in the stores are high, medium or low.
 ```{r}
 ggplot(df, aes(x=Sales_cat, y=Price)) + 
     geom_boxplot() + theme_ipsum() +
     labs(title = "Sales level price distribution", x ="Level Sales", y = "Price")
 ```
 
-El precio del asiento del coche está correlacionado negativamente con las ventas: a menores ventas el precio es más alto.
+The price of the car seat is negatively correlated with sales: the lower the sales, the higher the price.
 
-### ¿Es el precio de los asientos de coches muy distinto en tiendas con ventas bajas en zona rural y urbana?
+### Is the price of car seats very different in stores with low sales in rural and urban areas?
 ```{r}
 ggplot(df, aes(x=Sales_cat, y=Price, color=Urban)) + scale_color_brewer(palette = "Paired") +
     geom_boxplot() + theme_ipsum() + labs(title = "Sales level price distribution by area", x ="Level Sales", y = "Price")
 ```
 
-El precio del asiento del coche está correlacionado negativamente con las ventas en las zonas urbanas.
-Sin embargo, en zonas rurales, las ventas de categoría media son algo más altas que las ventas de categoría baja.
+Car seat price is negatively correlated with sales in urban areas.
+However, in rural areas, mid-category sales are somewhat higher than low-category sales.
 
-### ¿A más precio, la diferencia entre el precio del asiento del coche y el de la competencia, es menor?
+### At a higher price, is the difference between the price of the car seat and that of the competition lower?
 ```{r}
 ggplot(df, aes(x=Price, y=diff_price)) + 
     geom_point(
@@ -110,25 +110,25 @@ ggplot(df, aes(x=Price, y=diff_price)) +
         ) + theme_ipsum() + labs(title = "Price VS Price difference between shops and competition", x ="Price", y = "Price difference between shops and competition")
 ```
 
-Hay una tendencia a que cuanto mayor es el precio menor es la diferencia de precio del asiento del coche con la competencia.
+There is a tendency that the higher the price, the lower the price difference of the car seat with the competition.
 
-### ¿Cómo se distribuye la diferencia entre el precio del asiento del coche y el precio de la competencia?
+### How is the difference between the price of the car seat and the price of the competition distributed?
 ```{r}
 boxplot(df$diff_price, main = "Car seat price difference between shops and competition")
 summary(df$diff_price)
 ```
 
-3/4 partes tienen una diferencia entre el precio del asiento del coche y el precio de la competencia de 25 dólares o menos.
+3/4 parts have a difference between the price of the car seat and the price of the competition of 25 dollars or less.
 
-### ¿El precio de la competencia es mayor si es mayor el precio del asiento del coche en la tienda?
+### Is the price of the competition higher if the price of the car seat in the store is higher?
 ```{r}
 plot(x=df$Price, y=df$CompPrice, main
      = "Price VS CompPrice", ylab = "Competence Price", xlab = "Price", col = alpha("black", 0.5), pch = 19)
 ```
 
-Hay una correlación positiva entre el precio del asiento del coche en la tienda y el precio de su competencia.
+There is a positive correlation between the price of the car seat in the store and the price of your competition.
 
-### ¿A más ingresos la diferencia entre el precio del asiento del cocche y el de la competencia es menor?
+### Is the difference between the price of the car seat and that of the competition lower at higher incomes?
 ```{r}
 ggplot(df, aes(x=Price, y=diff_price, size=Income,color=Income)) + 
     geom_point(alpha=0.5) + theme_ipsum() + scale_color_gradient(low = "#FF410DFF", high = "#6EE2FFFF") +
@@ -140,52 +140,52 @@ ggplot(df, aes(x=Price, y=CompPrice, color=highlow_income)) +
     labs(title = "Competition price VS Price VS Income", x ="Price", y = "Competition price")
 ```
 
-No hay correlación entre los diferentes ingresos y el precio y la diferencia de precio del asiento del coche con la competencia.
+There is no correlation between the different income and price and the difference in price of the car seat with the competition.
 
-# Análisis de la variable ventas
-### ¿Las ventas en dólares son más cuanto más son las unidades vendidas?
+# Analysis of the sales variable
+### Are dollar sales more the more units are sold?
 ```{r}
 plot(x=df$Price, y=df$Sales, main = "Price VS Sales",  ylab = "Sales", xlab = "Price", col = alpha("black", 0.5), pch = 19)
 ```
 
-Hay una clara relación entre precio y ventas.
+There is a clear relationship between price and sales.
 
-A mayor precio hay una tendencia a vender menos asientos de los coches.
+At higher prices there is a tendency to sell fewer car seats.
 ```{r}
 plot(x=df$Price * df$Sales, y=df$Sales, main = "Sales Money VS Sales Quantity",  ylab = "Sales Quantity", xlab = "Sales Money", col = alpha("black", 0.5), pch = 19)
 ```
 
-A más ventas más dinero.
+The more sales, the more money.
 
-### ¿Más ventas a más población?
+### More sales to more population?
 ```{r}
 plot(x=df$Price * df$Sales, y=df$Population, main = "Sales Money VS Population", ylab = "Population", xlab = "Sales Money", col = alpha("black", 0.5), pch = 19)
 ```
 
-No hay una correlación entre el número de habitantes y las ventas en dinero.
+There is no correlation between the number of inhabitants and sales in money.
 
-### ¿Hay ventas más altas si hay más ingresos de la comunidad?
+### Are there higher sales if there is more income from the community?
 ```{r}
 plot(x = df$Sales_cat, y = df$Income, main="Sales categories VS Income", xlab="Sales categories",ylab="Income")
 ```
 
-Hay una clara relación entre las tiendas con ventas muy altas y el ingreso de la comunidad. A más ventas el ingreso de la comunidad es también mayor, y viceversa.
+There is a clear relationship between stores with very high sales and community income. The more sales the community income is also higher, and vice versa.
 
-### Nivel de ventas por ingreso y zona
+### Sales level by income and area
 ```{r}
 ggplot(df, aes(x=Sales_cat, y=Income, color=Urban)) + scale_color_brewer(palette = "Paired") +
     geom_boxplot() + theme_ipsum() + labs(title = "Income distribution by sales level and area", x ="Level Sales", y = "Income")
 ```
 
-Las tiendas con ventas bajas que están en zona rural tienen, por lo general, clientes con menos ingresos económicos que las tiendas en zonas urbanas.
+Low-selling stores in rural areas generally have lower-income customers than stores in urban areas.
 
-Las tiendas con ventas medias que están en zona rural tienen, por lo general, clientes con menos ingresos económicos que las tiendas en zonas urbanas.
+Stores with average sales in rural areas generally have customers with lower incomes than stores in urban areas.
 
-Las tiendas con ventas muy altas que están en zona rural tienen, por lo general, clientes con menos ingresos económicos que las tiendas en zonas urbanas.
+High-selling stores in rural areas generally have lower-income customers than stores in urban areas.
 
-Las tiendas con ventas altas que están en zona rural tienen, por lo general, clientes con mayores ingresos económicos que las tiendas en zonas urbanas.
+High-selling stores in rural areas generally have higher-income customers than stores in urban areas.
 
-### De las ventas totales en cada zona, ¿Hay mayor porcentaje de ventas rurales o urbanas según las ventas sean bajas, medias, altas o muy altas?
+### Of the total sales in each area, is there a higher percentage of rural or urban sales depending on whether sales are low, medium, high or very high?
 ```{r}
 summary(df$Sales)
 
@@ -201,13 +201,13 @@ ggplot(df_sales_urban, aes(fill=Urban,x=Sales_cat,y=per_sales_urban)) +
   theme(plot.title=element_text(size=11))
 ```
 
-Puesto que hay más tiendas en zona urbana que en zona rural no analizo las cantidades si no las proporciones de cada categoría de venta en cada zona.
+Since there are more stores in urban areas than in rural areas, I do not analyze the quantities, but rather the proportions of each category of sale in each area.
 
-Casi no hay diferencia en proporciones en ninguna categoría de ventas entre zona urbana y rural.
+There is almost no difference in proportions in any category of sales between urban and rural areas.
 
-Las diferencias en proporciones más notables son que proporcionalmente hay más ventas medias en la zona urbana y más ventas altas en la zona rural.
+The most notable differences in proportions are that proportionally there are more average sales in the urban area and more high sales in the rural area.
 
-### ¿Cómo son los clientes en las tiendas con ventas altas en zona rural?
+### How are customers in stores with high sales in rural areas?
 ```{r}
 df_highsales_rural <- filter(df, Sales_cat == "altas" & Urban == "No")
 lmts <- range(df_highsales_rural$Education,df$Education)
@@ -217,7 +217,7 @@ boxplot(df_highsales_rural$Education,ylim=lmts, main="Education with shops with 
 boxplot(df$Education,ylim=lmts, main="Education for all shops",cex.main=0.75)
 ```
 
-La distribución de la educación de los clientes en tiendas con ventas altas y en zona rural es superior, en general, a la distribución de la educación de todos los clientes de todas las tiendas. 
+The distribution of customer education in stores with high sales and in rural areas is higher, in general, than the distribution of education of all customers in all stores.
 ```{r}
 lmts <- range(df_highsales_rural$Age,df$Age)
 
@@ -226,37 +226,37 @@ boxplot(df_highsales_rural$Age,ylim=lmts, main="Age with shops with high sales i
 boxplot(df$Age,ylim=lmts, main="Age for all shops",cex.main=0.75)
 ```
 
-Hay  más gente joven en las tiendas con ventas altas y zona rural.
+There are more young people in stores with high sales and in rural areas.
 
-¿Cuánta gente más?
+How many more people?
 ```{r}
-print("Proporciones de edad de los clientes de tiendas con ventas altas en zona rural")
+print("Age proportions of customers of stores with high sales in rural areas")
 prop.table(table(df_highsales_rural$Age_cat)); 
-print("Proporciones de edad de los clientes para todas las tiendas")
+print("Customer age ratios for all stores")
 prop.table(table(df$Age_cat))
 ```
-Hay casi un 8% más de jóvenes en las tiendas con ventas altas en zona rural que en todas las tiendas.
+There are almost 8% more young people in stores with high sales in rural areas than in all stores.
 
-Las tiendas con ventas altas en zona rural tienen una comunidad con más ingresos, un 8% más de jóvenes y más educación.
+Stores with high sales in rural areas have a higher income community, 8% more youth and more education.
 
-### ¿Las tiendas con ventas altas en zona rural sitúan los asientos de los coches en algún estante en particular?
+### Do stores with high sales in rural areas put car seats on any particular shelf?
 ```{r}
-print("Proporciones de estanterías de los asientos de los coches de tiendas con ventas altas en zona rural")
+print("Car seat shelving ratios of high-selling stores in rural areas")
 prop.table(table(df_highsales_rural$ShelveLoc));
-print("Proporciones de estanterías de los asientos de los coches para todas las tiendas")
+print("Car seat shelving ratios for all stores")
 prop.table(table(df$ShelveLoc));
 ```
-Tienen proporcionalmente la mitad de asientos de los coches en estantes malos las tiendas con ventas altas en zona rural que todas las tiendas.
+High-selling stores in rural areas have proportionally half as many car seats on bad shelves as all stores.
 
-### ¿A más ventas el asiento del coche se encuentra en un mejor estante?
+### The more sales the car seat is on the better shelf?
 ```{r}
 plot(y = df$Sales, x = df$ShelveLoc, main="Sales VS Shelves", ylab="Sales",xlab="Shelves")
 ```
 
-A más ventas la localización del estante es mejor.
+The more sales the location of the shelf is the better.
 
-# Análisis de la variable publicidad
-### Hay más gasto de publicidad en zona rural o zona urbana?
+# Analysis of the advertising variable
+### Is there more advertising spending in rural or urban areas?
 ```{r}
 df %>% group_by(Urban) %>% summarise(mean_ads = mean(Advertising))
 ```
@@ -268,23 +268,23 @@ summary(filter(df, Urban== "No")$Income)
 summary(filter(df, Urban== "Yes")$Income)
 ```
 
-La distribución de la publicidad en la zona urbana es algo superior.
+The distribution of advertising in urban areas is somewhat higher.
 
-### ¿A más publicidad más ventas?
+### More advertising more sales?
 ```{r}
 plot(y = df$Sales, x = df$Advertising, main="Sales VS Advertising", ylab="Sales",xlab="Advertising", col = alpha("black", 0.5), pch = 19)
 ```
 
-No existe correlación entre ventas y publicidad.
+There is no correlation between sales and advertising.
 
-### ¿A mayor precio más inversión en publicidad?
+### The higher the price, the more investment in advertising?
 ```{r}
 plot(y = df$Advertising, x = df$Sales, main="Sales VS Advertising", ylab="Advertising",xlab="Sales", col = alpha("black", 0.5), pch = 19)
 ```
 
-Hay una ligera correlación positiva a más publicidad más ventas.
+There is a slight positive correlation to more advertising more sales.
 
-### ¿Hay alguna edad en la que haya una correlación más fuerte entre precio y publicidad?
+### Is there an age where there is a stronger correlation between price and advertising?
 ```{r}
 ggplot(df,aes(x=Advertising, y=Sales, size=Age, color=Age_cat)) +
     geom_point(alpha=0.5) + theme_ipsum() + scale_color_brewer(palette = "Paired") +
@@ -294,104 +294,104 @@ ggplot(filter(df,Age>=35),aes(x=Advertising, y=Sales, size=Age, color=Age_cat)) 
     labs(title = "Advertising VS Sales VS Age (greater than 35 years old)")
 ```
 
-Hay una correlación entre publicidad y ventas para clientes a partir de 35 años.
+There is a correlation between advertising and sales for clients over 35 years of age.
 
-### ¿Los que no invierten en publicidad venden de media lo mismo que el resto?
+### Do those who do not invest in advertising sell on average the same as the rest?
 ```{r}
 summary(filter(df,Advertising==0)$Sales)
 summary(filter(df,Advertising>0)$Sales)
 ```
-Los que invierten en publicidad venden de media $1000 más que el resto.
+Those who invest in advertising sell an average of $1,000 more than the rest.
 
-### ¿Los que invierten más en publicidad venden asientos de coches dispuestos en mejores estantes?
+### Do those who invest more in advertising sell car seats arranged in better shelves?
 ```{r}
 ggplot(filter(df,Age>=35),aes(x=Advertising, y=Sales, size=ShelveLoc, color=ShelveLoc)) +
     geom_point(alpha=0.5) + theme_ipsum() + scale_color_brewer(palette = "Paired") +
     labs(title = "Advertising VS Sales VS Shelves")
 ```
 
-Hay una clara correlación entre ventas más altas y mejor estante y el resto.
+There is a clear correlation between higher sales and better shelf and the rest.
 
-No hay correlación entre publicidad y localización del estante.
+There is no correlation between advertising and shelf location.
 
-# Análisis de la variable ingresos
-### ¿Hay más ingresos de la comunidad en zonas rurales o urbanas?
+# Analysis of the income variable
+### Is there more community income in rural or urban areas?
 ```{r}
 ggplot(df, aes(x=Urban,y=Income)) + geom_boxplot() +
     theme_ipsum() + labs(title = "Income distribution by area")
 ```
 
-La distribución de los ingresos de las comunidades es similar en zona urbana y zona rural.
+The distribution of community income is similar in urban and rural areas.
 
-### La distribución de ingresos por edad y zona
+### Income distribution by age and area
 ```{r}
 ggplot(df, aes(x=Urban, y=Income, color=Age_cat)) + geom_boxplot() +
     theme_ipsum() + scale_color_brewer(palette = "Paired") +
     labs(title = "Income distribution by area and age")
 ```
 
-Para los clientes entre 25-30, 30-35 y 40-45 años la distribución de ingresos es más compacta en zona rural.
+For clients between 25-30, 30-35 and 40-45 years old, income distribution is more compact in rural areas.
 
-Para los clientes entre 35-40 años la distribución de ingresos es superior en zona rural.
+For clients between 35-40 years of age, income distribution is higher in rural areas.
 
-Para los clientes entre 45-65 años la distribución de ingresos es inferior en zona rural.
+For clients between 45-65 years of age, income distribution is lower in rural areas.
 
-Para los clientes entre 65-80 años la distribución de ingresos es menos compacta en zona rural.
+For clients between 65-80 years of age, income distribution is less compact in rural areas.
 
 ```{r}
 ggplot(df %>% group_by(Age_cat, Urban) %>% summarise(mean_income = mean(Income),.groups='drop'), aes(fill=Urban,x=Age_cat,y=mean_income)) + geom_bar(stat= "identity", position=position_dodge()) + scale_fill_brewer(palette = "Paired") + theme(axis.text.x = element_text(angle = 45, vjust = 0.5, hjust=0.5)) + geom_text(aes(label = round(mean_income,2)), position = position_dodge(0.9),size=2,vjust = 0) + ggtitle("Average income by age range and area") + ylab("Mean Income") + labs(fill = "Urban") + xlab("Age intervals") + theme_ipsum()
 ```
 
-Los intervalos con mayor diferencia son de 35-40 y 45-65 años.
+The intervals with the greatest difference are 35-40 and 45-65 years.
 
-Los clientes de 35-40 años en zona rural tienen una media de ingresos superior a los que están en zona urbana.
+Customers aged 35-40 in rural areas have a higher average income than those in urban areas.
 
-Los clientes de 45-65 años en zona urbana tienen una media de ingresos superior a los que están en zona rural.
+Customers aged 45-65 in urban areas have a higher average income than those in rural areas.
 
-### ¿En las tiendas con comunidad con más ingresos hay más inversión de publicidad?
+### Do stores with a community with more income have more investment in advertising?
 ```{r}
 plot(x=df$Income, y=df$Advertising, main = "Income VS Advertising", ylab = "Advertising", xlab = "Income", col = alpha("black", 0.5), pch = 19)
 ```
 
-No hay una correlación entre ingresos de la comunidad y publicidad.
+There is no correlation between community income and advertising.
 
-### ¿En la tiendas con comunidad con más ingresos el precio de los asientos de coches es más caro?
+### Is the price of car seats more expensive in stores with a community with more income?
 ```{r}
 plot(x=df$Income, y=df$Price, main = "Income VS Price", ylab = "Price", xlab = "Income", col = alpha("black", 0.5), pch = 19)
 ```
 
-No hay correlación entre el precio de los car asientos de coches y los ingresos de la comunidad de clientes.
+There is no correlation between the price of car seats and the income of the customer community.
 
-### ¿En la tiendas con comunidad con más ingresos hay clientes más mayores?
+### Are there older customers in the community stores with more income?
 ```{r}
 plot(x=df$Income, y=df$Age, main = "Income VS Age", ylab = "Age", xlab = "Income", col = alpha("black", 0.5), pch = 19)
 ```
 
-No hay correlación entre el ingreso de la comunidad de clientes y las edades de los clientes.
+There is no correlation between the income of the client community and the ages of the clients.
 
-### ¿En la tiendas con comunidad con más ingresos hay clientes con más educación?
+### Are there more educated customers in stores with a higher income community?
 ```{r}
 plot(x=df$Income, y=df$Education, main = "Income VS Education", ylab = "Education", xlab = "Income", col = alpha("black", 0.5), pch = 19)
 ```
 
-No hay correlación entre el ingreso de la comunidad de clientes y la educación de los clientes.
+There is no correlation between customer community income and customer education.
 
-### ¿En la tiendas con comunidad con más ingresos hay tiendas con más ventas?
+### Are there stores with more sales in the community stores with more income?
 ```{r}
 plot(x=df$Income, y=df$Sales, main = "Income VS Sales", ylab = "Sales", xlab = "Income", col = alpha("black", 0.5), pch = 19)
 ```
 
-No hay correlación entre el ingreso de la comunidad de clientes y las ventas.
+There is no correlation between customer community income and sales.
 
-### ¿En la tiendas con comunidad con más ingresos la disposición de los asientos de coches en los estantes es mejor?
+### Is the arrangement of car seats on the shelves better in the community stores with more income?
 ```{r}
 plot(x=df$Income, y=df$ShelveLoc, main = "Income VS Shelves", ylab = "Shelves", xlab = "Income", col = alpha("black", 0.5), pch = 19)
 ```
 
-No hay correlación entre el ingreso de la comunidad de clientes y los estantes en los que se disponen los asientos de coches.
+There is no correlation between the income of the customer community and the shelves on which car seats are available.
 
-# Análisis de la variable edad de los clientes
-### ¿A más edad más educación?
+# Analysis of the customer age variable
+### Older, more educated?
 ```{r}
 df %>% group_by(Age_cat) %>% summarise(median_edu = median(Education),.groups = 'drop')
 ```
@@ -409,18 +409,18 @@ quantile(filter(df, Age_cat == "45-65")$Education);
 print("65-80")
 quantile(filter(df, Age_cat == "65-80")$Education)
 ```
-Los clientes de 40-65 años tienen menos educación que el resto de clientes.
+Clients aged 40-65 have less education than other clients.
 
-Analizo si esta apreciación tiene que ver con estar o no en zona rural.
+I analyze if this assessment has to do with being in a rural area or not.
 
-### ¿Hay más tiendas con clientes de 40-65 años en zona rural o urbana?
+### Are there more stores with customers aged 40-65 in rural or urban areas?
 ```{r}
 prop.table(table(df$Urban))
 prop.table(table(filter(df, Age >= 40 & Age <= 65)$Urban))
 ```
-Las tiendas con clientes de 40-65 años tienen el mismo porcentaje en zonas rurales y urbanas que el total de tiendas.
+Stores with customers aged 40-65 have the same percentage in rural and urban areas as the total number of stores.
 
-### ¿Hay diferencia de edad de los clientes que compran en zona rural o urbana?
+### Is there a difference in the age of customers who buy in rural or urban areas?
 ```{r}
 df_age_urban <- df %>% group_by(Age_cat,Urban) %>% summarise(n = n(),.groups='drop')
 df_age_urban$per_age_urban <- ifelse(df_age_urban$Urban == "Yes", round(df_age_urban$n/sum(df$Urban == "Yes"),2),round(df_age_urban$n/sum(df$Urban == "No"),2))
@@ -433,14 +433,14 @@ ggplot(df_age_urban, aes(fill=Urban,x=Age_cat,y=per_age_urban)) + geom_bar(stat=
 
 ```
 
-No hay mucha diferencia entre los edades de los clientes en zona urbana y rural.
+There is not much difference between the ages of clients in urban and rural areas.
 
-¿Los clientes más jóvenes viven más en la ciudad que el resto?
+Do the youngest clients live more in the city than the rest?
 
-Dado que hay un 70% de clientes que viven en la ciudad y un 30% de clientes que viven en el campo es lógico que haya más clientes jóvenes viviendo en la ciudad. Sin embargo, analizo de entre todos los que viven en la ciudad qué porcentaje es joven y de entre todos los que viven en el campo qué porcentaje no es joven.
+Given that 70% of clients live in the city and 30% of clients live in the countryside, it is logical that there are more young clients living in the city. However, I analyze among all those who live in the city what percentage is young and among all those who live in the countryside what percentage is not young.
 
-De los que viven en la ciudad el 10% son jóvenes.
+Of those who live in the city, 10% are young.
 
-De los que viven en el campo el 14% son jóvenes.
+Of those who live in the countryside, 14% are young.
 
-Hay casi el mismo porcentaje de jóvenes que viven en la ciudad y en el campo si contamos a los clientes totales rurales por un lado y a los clientes totales urbanos por otro lado.
+There is almost the same percentage of young people who live in the city and in the countryside if we count total rural clients on the one hand and total urban clients on the other hand.
